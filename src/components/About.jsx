@@ -35,7 +35,7 @@ const About = () => {
       <Container>
         {/* About Header */}
         <div className="text-center mb-5">
-          <h2 className="section-title">About FenTech</h2>
+          <h2 className="section-title">About FineEdge</h2>
           <p className="section-subtitle">
             Leading the future of financial technology
           </p>
@@ -55,7 +55,7 @@ const About = () => {
               Transforming Financial Services Since 2014
             </h3>
             <p className="text-muted mb-3">
-              FenTech was founded with a simple yet powerful vision: to make
+              FineEdge was founded with a simple yet powerful vision: to make
               financial services accessible, secure, and efficient for everyone.
               What started as a small team of passionate developers has grown
               into a global fintech leader serving over 500,000 users across 150

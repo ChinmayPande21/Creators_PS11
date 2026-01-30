@@ -1,15 +1,15 @@
 :root {
-  --primary-color: #0066cc;
-  --secondary-color: #00b4d8;
-  --accent-color: #0096c7;
-  --dark-color: #023e8a;
-  --light-color: #caf0f8;
+  --primary-color: #667eea;
+  --secondary-color: #764ba2;
+  --accent-color: #8b5cf6;
+  --dark-color: #5b21b6;
+  --light-color: #ede9fe;
   --text-dark: #212529;
   --text-light: #6c757d;
   --success-color: #28a745;
   --danger-color: #dc3545;
   --warning-color: #ffc107;
-  --info-color: #17a2b8;
+  --info-color: #8b5cf6;
   --bg-light: #ffffff;
   --bg-dark: #1a1a1a;
   --text-color-light: #212529;
@@ -31,6 +31,13 @@ html[data-theme="dark"] {
   --navbar-bg-dark: #1a1a1a;
 }
 
+html[data-theme="dark"] body,
+html[data-theme="dark"] #root,
+html[data-theme="dark"] .App {
+  background-color: var(--bg-light);
+  color: var(--text-color-dark);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -42,6 +49,10 @@ html {
 }
 
 body {
+  overflow-x: hidden;
+}
+
+body {
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
@@ -50,7 +61,23 @@ body {
   color: var(--text-dark);
   overflow-x: hidden;
   line-height: 1.6;
-  background-color: #fff;
+  background-color: var(--bg-light);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg-light);
 }
 
 code {
@@ -111,7 +138,7 @@ html {
   background-color: var(--dark-color);
   border-color: var(--dark-color);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
 }
 
 .btn-outline-primary {

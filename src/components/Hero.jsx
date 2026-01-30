@@ -29,7 +29,7 @@ const Hero = () => {
                 style={{ fontSize: "1.2rem", opacity: 0.95 }}
               >
                 Seamless payments, secure banking, and powerful analytics.
-                Transform your financial operations with FenTech's cutting-edge
+                Transform your financial operations with FineEdge's cutting-edge
                 solutions.
               </p>
               <div className="d-flex flex-wrap gap-3 mb-5">
@@ -53,52 +53,13 @@ const Hero = () => {
                   Learn More
                 </Button>
               </div>
-
-              {/* Trust indicators */}
-              <div className="mt-5 pt-4 border-top border-light border-opacity-25">
-                <Row className="text-center text-lg-start">
-                  <Col xs={6} sm={4} className="mb-3 mb-sm-0">
-                    <h3 className="fw-bold mb-0" style={{ fontSize: "1.8rem" }}>
-                      500K+
-                    </h3>
-                    <small
-                      className="text-light"
-                      style={{ fontSize: "0.9rem" }}
-                    >
-                      Active Users
-                    </small>
-                  </Col>
-                  <Col xs={6} sm={4} className="mb-3 mb-sm-0">
-                    <h3 className="fw-bold mb-0" style={{ fontSize: "1.8rem" }}>
-                      $2B+
-                    </h3>
-                    <small
-                      className="text-light"
-                      style={{ fontSize: "0.9rem" }}
-                    >
-                      Processed
-                    </small>
-                  </Col>
-                  <Col xs={6} sm={4} className="mb-3 mb-sm-0">
-                    <h3 className="fw-bold mb-0" style={{ fontSize: "1.8rem" }}>
-                      99.9%
-                    </h3>
-                    <small
-                      className="text-light"
-                      style={{ fontSize: "0.9rem" }}
-                    >
-                      Uptime
-                    </small>
-                  </Col>
-                </Row>
-              </div>
             </div>
           </Col>
 
           <Col lg={6}>
             <div className="hero-image-container">
               <img
-                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=600&fit=crop"
+                src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=800&fit=crop"
                 alt="Financial Dashboard"
                 className="img-fluid rounded shadow-lg"
                 loading="lazy"

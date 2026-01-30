@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Modal } from 'react-bootstrap';
+import React, { useState } from "react";
+import { Container, Row, Col, Modal } from "react-bootstrap";
 
 const Gallery = () => {
   const [showModal, setShowModal] = useState(false);
@@ -7,35 +7,41 @@ const Gallery = () => {
 
   const screenshots = [
     {
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
-      title: 'Analytics Dashboard',
-      description: 'Real-time insights and comprehensive reporting'
+      image:
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+      title: "Analytics Dashboard",
+      description: "Real-time insights and comprehensive reporting",
     },
     {
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
-      title: 'Transaction Management',
-      description: 'Track and manage all your transactions'
+      image:
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+      title: "Transaction Management",
+      description: "Track and manage all your transactions",
     },
     {
-      image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=600&fit=crop',
-      title: 'Payment Processing',
-      description: 'Secure and fast payment gateway'
+      image:
+        "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=600&fit=crop",
+      title: "Payment Processing",
+      description: "Secure and fast payment gateway",
     },
     {
-      image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&h=600&fit=crop',
-      title: 'Mobile Banking',
-      description: 'Full-featured mobile application'
+      image:
+        "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&h=600&fit=crop",
+      title: "Mobile Banking",
+      description: "Full-featured mobile application",
     },
     {
-      image: 'https://images.unsplash.com/photo-1556155092-490a1ba16284?w=800&h=600&fit=crop',
-      title: 'Customer Portal',
-      description: 'User-friendly customer interface'
+      image:
+        "https://images.unsplash.com/photo-1556155092-490a1ba16284?w=800&h=600&fit=crop",
+      title: "Customer Portal",
+      description: "User-friendly customer interface",
     },
     {
-      image: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&h=600&fit=crop',
-      title: 'Admin Console',
-      description: 'Powerful admin management tools'
-    }
+      image:
+        "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&h=600&fit=crop",
+      title: "Admin Console",
+      description: "Powerful admin management tools",
+    },
   ];
 
   const handleImageClick = (screenshot) => {
@@ -56,41 +62,46 @@ const Gallery = () => {
         <Row className="g-4">
           {screenshots.map((screenshot, index) => (
             <Col key={index} md={6} lg={4}>
-              <div 
+              <div
                 className="position-relative overflow-hidden rounded shadow-sm"
-                style={{ 
-                  cursor: 'pointer',
-                  height: '300px'
+                style={{
+                  cursor: "pointer",
+                  height: "300px",
                 }}
                 onClick={() => handleImageClick(screenshot)}
               >
-                <img 
-                  src={screenshot.image} 
+                <img
+                  src={screenshot.image}
                   alt={screenshot.title}
                   className="w-100 h-100"
-                  style={{ 
-                    objectFit: 'cover',
-                    transition: 'transform 0.3s ease'
+                  style={{
+                    objectFit: "cover",
+                    transition: "transform 0.3s ease",
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
-                  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.1)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
                 />
-                <div 
+                <div
                   className="position-absolute bottom-0 start-0 w-100 p-4 text-white"
-                  style={{ 
-                    background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)'
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
                   }}
                 >
                   <h5 className="fw-bold mb-1">{screenshot.title}</h5>
                   <p className="mb-0 small">{screenshot.description}</p>
                 </div>
-                <div 
+                <div
                   className="position-absolute top-50 start-50 translate-middle"
-                  style={{ 
+                  style={{
                     opacity: 0,
-                    transition: 'opacity 0.3s ease'
+                    transition: "opacity 0.3s ease",
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.opacity = 1}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = 1)}
                 >
                   <i className="bi bi-zoom-in fs-1 text-white"></i>
                 </div>
@@ -104,18 +115,18 @@ const Gallery = () => {
           <Row className="align-items-center">
             <Col lg={6} className="mb-4 mb-lg-0">
               <div className="position-relative rounded overflow-hidden shadow-lg">
-                <img 
-                  src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=700&h=500&fit=crop" 
+                <img
+                  src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=700&h=500&fit=crop"
                   alt="Video Demo"
                   className="w-100"
                 />
-                <div 
+                <div
                   className="position-absolute top-50 start-50 translate-middle"
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: "pointer" }}
                 >
-                  <div 
+                  <div
                     className="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-lg"
-                    style={{ width: '80px', height: '80px' }}
+                    style={{ width: "80px", height: "80px" }}
                   >
                     <i className="bi bi-play-fill fs-1 text-primary"></i>
                   </div>
@@ -123,10 +134,10 @@ const Gallery = () => {
               </div>
             </Col>
             <Col lg={6}>
-              <h3 className="fw-bold mb-4">See FenTech in Action</h3>
+              <h3 className="fw-bold mb-4">See FineEdge in Action</h3>
               <p className="text-muted mb-3">
-                Watch our 3-minute demo video to see how easy it is to get started 
-                with FenTech and transform your financial operations.
+                Watch our 3-minute demo video to see how easy it is to get
+                started with FineEdge and transform your financial operations.
               </p>
               <ul className="list-unstyled">
                 <li className="mb-2">
@@ -179,9 +190,9 @@ const Gallery = () => {
       </Container>
 
       {/* Image Modal */}
-      <Modal 
-        show={showModal} 
-        onHide={() => setShowModal(false)} 
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
         size="lg"
         centered
       >
@@ -189,8 +200,8 @@ const Gallery = () => {
           <Modal.Title>{selectedImage?.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <img 
-            src={selectedImage?.image} 
+          <img
+            src={selectedImage?.image}
             alt={selectedImage?.title}
             className="w-100"
           />
