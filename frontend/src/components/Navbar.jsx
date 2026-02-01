@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Navbar, Nav, Container, Button, Badge } from "react-bootstrap";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const NavigationBar = () => {
   const [expanded, setExpanded] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, userRole, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,9 +22,7 @@ const NavigationBar = () => {
       ? "rgba(255, 255, 255, 0.98)"
       : "rgba(255, 255, 255, 0.85)",
     backdropFilter: "blur(20px)",
-    borderBottom: scrolled
-      ? "1px solid rgba(139, 92, 246, 0.2)"
-      : "none",
+    borderBottom: scrolled ? "1px solid rgba(139, 92, 246, 0.2)" : "none",
     boxShadow: scrolled
       ? "0 8px 32px rgba(139, 92, 246, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05)"
       : "none",
@@ -100,7 +100,7 @@ const NavigationBar = () => {
             position: relative;
             pointer-events: auto;
           }
-          
+
           .navbar-glass::before {
             content: '';
             position: absolute;
@@ -113,19 +113,18 @@ const NavigationBar = () => {
             transition: opacity 0.3s ease;
             pointer-events: none;
           }
-          }
-          
+
           .navbar-glass:hover::before {
             opacity: 1;
           }
-          
+
           .nav-link-custom {
             position: relative;
             overflow: hidden;
             pointer-events: auto;
             cursor: pointer;
           }
-          
+
           .nav-link-custom::before {
             content: '';
             position: absolute;
@@ -211,6 +210,26 @@ const NavigationBar = () => {
           .btn-login:hover::before {
             left: 100%;
           }
+
+          .btn-login-warden {
+            border-radius: 12px;
+            padding: 0.6rem 1.4rem;
+            font-weight: 800;
+            border: none;
+            background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+            color: white;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.25);
+            pointer-events: auto;
+            cursor: pointer;
+          }
+
+          .btn-login-warden:hover {
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.35);
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+          }
           
           .btn-signup {
             border-radius: 12px;
@@ -259,6 +278,36 @@ const NavigationBar = () => {
           
           .btn-signup:hover .rocket-icon {
             transform: translateX(4px) translateY(-4px) rotate(-15deg);
+          }
+
+          .btn-logout {
+            border-radius: 12px;
+            padding: 0.6rem 1.4rem;
+            font-weight: 800;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            background: rgba(239, 68, 68, 0.08);
+            color: #b91c1c;
+            transition: all 0.3s ease;
+          }
+
+          .btn-logout:hover {
+            transform: translateY(-2px);
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.35);
+          }
+
+          .role-pill {
+            border-radius: 999px;
+            padding: 0.55rem 0.85rem;
+            font-weight: 800;
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            background: rgba(139, 92, 246, 0.10);
+            color: #5b21b6;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: default;
           }
           
           .theme-toggle {
@@ -322,14 +371,26 @@ const NavigationBar = () => {
               border: 1px solid rgba(139, 92, 246, 0.2);
               pointer-events: auto;
             }
-            }
           }
           
-          .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            animation: pulse 2s ease-in-out infinite;
+          .nav-icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            border: 1px solid rgba(139, 92, 246, 0.22);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.12);
+          }
+
+          .nav-icon-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(102, 126, 234, 0.18);
+            border-color: rgba(139, 92, 246, 0.35);
           }
           
           .navbar-sticky {
@@ -354,17 +415,17 @@ const NavigationBar = () => {
         <Container fluid className="px-3 px-md-4">
           <Navbar.Brand
             as={Link}
-            to="/"
+            to="/dashboard"
             onClick={() => setExpanded(false)}
             className="brand-logo-wrapper"
           >
             <div style={iconContainerStyle} className="brand-icon-container">
               <i
-                className="bi bi-bank2 text-white"
+                className="bi bi-shield-check text-white"
                 style={{ fontSize: scrolled ? "1.3rem" : "1.5rem" }}
               ></i>
             </div>
-            <span style={brandStyle}>FineEdge</span>
+            <span style={brandStyle}>ClearFix</span>
           </Navbar.Brand>
 
           <Navbar.Toggle
@@ -379,50 +440,152 @@ const NavigationBar = () => {
 
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto align-items-center gap-1">
-              <Nav.Link
-                as={Link}
-                to="/"
-                className={`nav-link-custom ${isActive("/") ? "active" : ""}`}
-                onClick={() => setExpanded(false)}
-                style={{
-                  ...navLinkStyle,
-                  color: "#1a202c",
-                }}
-              >
-                <i className="bi bi-house-door me-2"></i>Home
-              </Nav.Link>
+              {isAuthenticated && (
+                <>
+                  <Nav.Link
+                    as={Link}
+                    to="/dashboard"
+                    className={`nav-link-custom ${isActive("/dashboard") ? "active" : ""}`}
+                    onClick={() => setExpanded(false)}
+                    style={{
+                      ...navLinkStyle,
+                      color: "#1a202c",
+                    }}
+                  >
+                    <i className="bi bi-speedometer2 me-2"></i>Dashboard
+                  </Nav.Link>
 
-              <Nav.Link
-                href="#contact"
-                className="nav-link-custom"
-                onClick={() => setExpanded(false)}
-                style={{
-                  ...navLinkStyle,
-                  color: "#1a202c",
-                }}
-              >
-                <i className="bi bi-envelope me-2"></i>Contact
-              </Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to="/complaints"
+                    className={`nav-link-custom ${isActive("/complaints") ? "active" : ""}`}
+                    onClick={() => setExpanded(false)}
+                    style={{
+                      ...navLinkStyle,
+                      color: "#1a202c",
+                    }}
+                  >
+                    <i className="bi bi-chat-left-text me-2"></i>Complaints
+                  </Nav.Link>
+
+                  <Nav.Link
+                    as={Link}
+                    to="/payments"
+                    className={`nav-link-custom ${isActive("/payments") ? "active" : ""}`}
+                    onClick={() => setExpanded(false)}
+                    style={{
+                      ...navLinkStyle,
+                      color: "#1a202c",
+                    }}
+                  >
+                    <i className="bi bi-credit-card me-2"></i>Payments
+                  </Nav.Link>
+
+                  {userRole === "student" && (
+                    <Nav.Link
+                      as={Link}
+                      to="/hostels"
+                      className={`nav-link-custom ${isActive("/hostels") ? "active" : ""}`}
+                      onClick={() => setExpanded(false)}
+                      style={{
+                        ...navLinkStyle,
+                        color: "#1a202c",
+                      }}
+                    >
+                      <i className="bi bi-buildings me-2"></i>Hostels
+                    </Nav.Link>
+                  )}
+
+                  <Nav.Link
+                    as={Link}
+                    to="/analytics"
+                    className={`nav-link-custom ${isActive("/analytics") ? "active" : ""}`}
+                    onClick={() => setExpanded(false)}
+                    style={{
+                      ...navLinkStyle,
+                      color: "#1a202c",
+                    }}
+                  >
+                    <i className="bi bi-graph-up-arrow me-2"></i>Analytics
+                  </Nav.Link>
+
+                  <Nav.Link
+                    href="#contact"
+                    className="nav-link-custom"
+                    onClick={() => setExpanded(false)}
+                    style={{
+                      ...navLinkStyle,
+                      color: "#1a202c",
+                    }}
+                  >
+                    <i className="bi bi-envelope me-2"></i>Contact
+                  </Nav.Link>
+                </>
+              )}
 
               <div className="d-flex gap-2 mt-3 mt-lg-0 align-items-center ms-lg-3">
-                <Button
-                  as={Link}
-                  to="/login"
-                  onClick={() => setExpanded(false)}
-                  className="btn-login"
-                >
-                  <i className="bi bi-box-arrow-in-right me-2"></i>Login
-                </Button>
+                {/* Right-side controls */}
+                {isAuthenticated ? (
+                  <>
+                    <Button
+                      variant="link"
+                      className="nav-icon-btn text-decoration-none"
+                      aria-label="Account"
+                      onClick={() => setExpanded(false)}
+                    >
+                      <i
+                        className="bi bi-person"
+                        style={{ color: "#1a202c", fontSize: "1.3rem" }}
+                      ></i>
+                    </Button>
 
-                <Button
-                  as={Link}
-                  to="/signup"
-                  onClick={() => setExpanded(false)}
-                  className="btn-signup"
-                >
-                  <i className="bi bi-rocket-takeoff me-2 rocket-icon"></i>
-                  Sign Up
-                </Button>
+                    <span className="role-pill">
+                      <i className="bi bi-person-badge"></i>
+                      {userRole === "warden" ? "Warden" : "Student"}
+                    </span>
+
+                    <Button
+                      className="btn-logout"
+                      onClick={() => {
+                        logout();
+                        setExpanded(false);
+                      }}
+                    >
+                      <i className="bi bi-box-arrow-right me-2"></i>
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      as={Link}
+                      to="/login?role=student"
+                      onClick={() => setExpanded(false)}
+                      className="btn-login"
+                    >
+                      <i className="bi bi-mortarboard me-2"></i>Student Login
+                    </Button>
+
+                    <Button
+                      as={Link}
+                      to="/login?role=warden"
+                      onClick={() => setExpanded(false)}
+                      className="btn-login-warden"
+                    >
+                      <i className="bi bi-shield-lock me-2"></i>Warden Login
+                    </Button>
+
+                    <Button
+                      as={Link}
+                      to="/signup?role=student"
+                      onClick={() => setExpanded(false)}
+                      className="btn-signup"
+                    >
+                      <i className="bi bi-rocket-takeoff me-2 rocket-icon"></i>
+                      Sign Up
+                    </Button>
+                  </>
+                )}
               </div>
             </Nav>
           </Navbar.Collapse>

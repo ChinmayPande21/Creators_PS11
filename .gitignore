@@ -20,6 +20,9 @@ static/
 /.sass-cache/
 *.pem
 /.turbo/
+
+# Local/extra repo copy (do not commit)
+Team_Creators/
 # Logs
 logs
 *.log

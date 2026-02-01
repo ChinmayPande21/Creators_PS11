@@ -1,39 +1,12 @@
 {
-  "name": "fentech-website",
-  "version": "1.0.0",
-  "description": "Modern Fintech Website built with React and Bootstrap",
+  "name": "hostel",
   "private": true,
-  "dependencies": {
-    "@supabase/supabase-js": "^2.93.3",
-    "bootstrap": "^5.3.2",
-    "bootstrap-icons": "^1.11.2",
-    "react": "^18.2.0",
-    "react-bootstrap": "^2.9.1",
-    "react-dom": "^18.2.0",
-    "react-icons": "^4.12.0",
-    "react-router-dom": "^6.20.0",
-    "recharts": "^3.7.0"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.2.0",
-    "eslint": "^9.39.2",
-    "vite": "^5.0.0"
-  },
+  "description": "Repo root. Frontend lives in ./frontend",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dev": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "start:backend": "npm --prefix backend run start",
+    "build": "npm --prefix frontend run build",
+    "preview": "npm --prefix frontend run preview"
   }
 }

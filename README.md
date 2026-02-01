@@ -7,7 +7,7 @@ Getting started
 1. Install dependencies
 
 ```bash
-npm install
+npm install --prefix frontend
 ```
 
 2. Run dev server
@@ -29,4 +29,5 @@ npm run preview
 ```
 
 Notes
+
 - This repository was pushed from a local workspace.

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Row,
@@ -8,10 +8,52 @@ import {
   Button,
   Alert,
 } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
+const buildRememberKey = (role) => `clearfix.rememberedLogin.${role}`;
+
+const readRememberedLogin = (role) => {
+  try {
+    const raw = localStorage.getItem(buildRememberKey(role));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return null;
+    return {
+      email: typeof parsed.email === "string" ? parsed.email : "",
+      password: typeof parsed.password === "string" ? parsed.password : "",
+    };
+  } catch {
+    return null;
+  }
+};
+
+const writeRememberedLogin = (role, { email, password }) => {
+  try {
+    localStorage.setItem(
+      buildRememberKey(role),
+      JSON.stringify({ email: email || "", password: password || "" }),
+    );
+  } catch {
+    // ignore storage quota / unavailable
+  }
+};
+
+const clearRememberedLogin = (role) => {
+  try {
+    localStorage.removeItem(buildRememberKey(role));
+  } catch {
+    // ignore
+  }
+};
 
 const Login = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { login } = useAuth();
+  const [role, setRole] = useState(() => {
+    return searchParams.get("role") === "warden" ? "warden" : "student";
+  });
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,6 +66,30 @@ const Login = () => {
     const savedDarkMode = localStorage.getItem("darkMode");
     return savedDarkMode ? JSON.parse(savedDarkMode) : false;
   });
+
+  useEffect(() => {
+    const qpRole = searchParams.get("role");
+    setRole(qpRole === "warden" ? "warden" : "student");
+  }, [searchParams]);
+
+  useEffect(() => {
+    const remembered = readRememberedLogin(role);
+    if (remembered && (remembered.email || remembered.password)) {
+      setFormData((prev) => ({
+        ...prev,
+        email: remembered.email,
+        password: remembered.password,
+        rememberMe: true,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        email: "",
+        password: "",
+        rememberMe: false,
+      }));
+    }
+  }, [role]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -41,10 +107,17 @@ const Login = () => {
     // Mock authentication logic
     setTimeout(() => {
       if (formData.email && formData.password) {
+        if (formData.rememberMe) {
+          writeRememberedLogin(role, {
+            email: formData.email,
+            password: formData.password,
+          });
+        } else {
+          clearRememberedLogin(role);
+        }
         // Simulate successful login
-        localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("userEmail", formData.email);
-        navigate("/");
+        login(formData.email, undefined, role);
+        navigate("/dashboard");
       } else {
         setError("Please enter valid credentials");
       }
@@ -339,7 +412,7 @@ const Login = () => {
                     className="text-muted"
                     style={{ fontSize: "14px", marginBottom: "15px" }}
                   >
-                    Login to your FineEdge account
+                    Login to your ClearFix account
                   </p>
                 </div>
 
@@ -359,6 +432,40 @@ const Login = () => {
                 )}
 
                 <Form onSubmit={handleSubmit}>
+                  <div className="d-flex gap-2 mb-3">
+                    <Button
+                      type="button"
+                      onClick={() => setRole("student")}
+                      variant={
+                        role === "student" ? "primary" : "outline-primary"
+                      }
+                      style={{
+                        borderRadius: "12px",
+                        fontWeight: 800,
+                        padding: "10px 14px",
+                        borderWidth: 2,
+                      }}
+                    >
+                      <i className="bi bi-mortarboard me-2"></i>
+                      Student
+                    </Button>
+
+                    <Button
+                      type="button"
+                      onClick={() => setRole("warden")}
+                      variant={role === "warden" ? "dark" : "outline-dark"}
+                      style={{
+                        borderRadius: "12px",
+                        fontWeight: 800,
+                        padding: "10px 14px",
+                        borderWidth: 2,
+                      }}
+                    >
+                      <i className="bi bi-shield-lock me-2"></i>
+                      Warden
+                    </Button>
+                  </div>
+
                   <Form.Group className="mb-2">
                     <Form.Label
                       style={{

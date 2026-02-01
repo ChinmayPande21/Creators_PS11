@@ -1,20 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
+const buildRememberKey = (role) => `clearfix.rememberedLogin.${role}`;
+
+const writeRememberedLogin = (role, { email, password }) => {
+  try {
+    localStorage.setItem(
+      buildRememberKey(role),
+      JSON.stringify({ email: email || "", password: password || "" }),
+    );
+  } catch {
+    // ignore storage quota / unavailable
+  }
+};
+
+const clearRememberedLogin = (role) => {
+  try {
+    localStorage.removeItem(buildRememberKey(role));
+  } catch {
+    // ignore
+  }
+};
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { login } = useAuth();
+  const [role, setRole] = useState(() => {
+    return searchParams.get("role") === "warden" ? "warden" : "student";
+  });
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
+    rememberMe: false,
     agreeToTerms: false,
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  useEffect(() => {
+    const qpRole = searchParams.get("role");
+    setRole(qpRole === "warden" ? "warden" : "student");
+  }, [searchParams]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -71,11 +104,17 @@ const SignUp = () => {
 
     // Mock registration logic
     setTimeout(() => {
+      if (formData.rememberMe) {
+        writeRememberedLogin(role, {
+          email: formData.email,
+          password: formData.password,
+        });
+      } else {
+        clearRememberedLogin(role);
+      }
       // Simulate successful registration
-      localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("userEmail", formData.email);
-      localStorage.setItem("userName", formData.fullName);
-      navigate("/");
+      login(formData.email, formData.fullName, role);
+      navigate("/dashboard");
       setLoading(false);
     }, 1500);
   };
@@ -427,6 +466,40 @@ const SignUp = () => {
                 </div>
 
                 <Form onSubmit={handleSubmit}>
+                  <div className="d-flex gap-2 mb-3">
+                    <Button
+                      type="button"
+                      onClick={() => setRole("student")}
+                      variant={
+                        role === "student" ? "success" : "outline-success"
+                      }
+                      style={{
+                        borderRadius: "12px",
+                        fontWeight: 800,
+                        padding: "10px 14px",
+                        borderWidth: 2,
+                      }}
+                    >
+                      <i className="bi bi-mortarboard me-2"></i>
+                      Student
+                    </Button>
+
+                    <Button
+                      type="button"
+                      onClick={() => setRole("warden")}
+                      variant={role === "warden" ? "dark" : "outline-dark"}
+                      style={{
+                        borderRadius: "12px",
+                        fontWeight: 800,
+                        padding: "10px 14px",
+                        borderWidth: 2,
+                      }}
+                    >
+                      <i className="bi bi-shield-lock me-2"></i>
+                      Warden
+                    </Button>
+                  </div>
+
                   <Form.Group className="mb-2">
                     <Form.Label
                       style={{
@@ -611,6 +684,20 @@ const SignUp = () => {
                       }
                       feedback={errors.agreeToTerms}
                       feedbackType="invalid"
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-2">
+                    <Form.Check
+                      type="checkbox"
+                      name="rememberMe"
+                      checked={formData.rememberMe}
+                      onChange={handleChange}
+                      label={
+                        <span style={{ fontSize: "14px", color: "#4a5568" }}>
+                          Remember password on this device
+                        </span>
+                      }
                     />
                   </Form.Group>
 
