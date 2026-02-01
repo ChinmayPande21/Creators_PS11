@@ -6,7 +6,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import NavigationBar from "./components/Navbar";
-import Footer from "./components/Footer";
 import Portfolio from "./pages/Portfolio";
 import Dashboard from "./pages/Dashboard";
 import Complaints from "./pages/Complaints";
@@ -15,6 +14,7 @@ import Hostels from "./pages/Hostels";
 import Analytics from "./pages/Analytics";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import Footer from "./components/Footer";
 import { PortfolioProvider } from "./context/PortfolioContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ComplaintsProvider } from "./context/ComplaintsContext";
@@ -131,6 +131,7 @@ const AppShell = () => {
 
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
+
               {isAuthenticated && <Footer />}
             </RaggingAlertsProvider>
           </PaymentsProvider>

@@ -22,6 +22,7 @@ const Footer = () => {
         className="text-white pt-5 pb-4"
         style={{
           background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+          scrollMarginTop: "96px",
         }}
       >
         <Container>
@@ -52,7 +53,7 @@ const Footer = () => {
                   }}
                 >
                   <i
-                    className="bi bi-bank2 text-white"
+                    className="bi bi-shield-check text-white"
                     style={{ fontSize: "1.2rem" }}
                   ></i>
                 </div>
@@ -67,16 +68,15 @@ const Footer = () => {
                     backgroundClip: "text",
                   }}
                 >
-                  FineEdge
+                  ClearFix
                 </span>
               </div>
               <p
                 className="text-white-50 mb-4"
                 style={{ fontSize: "0.95rem", lineHeight: "1.7" }}
               >
-                Modern financial technology solutions for seamless payments,
-                banking, and financial management. Trusted by businesses
-                worldwide.
+                A smart hostel management system for students and wardens—
+                complaints, payments, safety alerts, and analytics in one place.
               </p>
               <div className="d-flex gap-3">
                 {[
@@ -128,31 +128,56 @@ const Footer = () => {
                 Company
               </h5>
               <ul className="list-unstyled">
-                {["About Us", "Features", "Pricing", "Contact"].map(
-                  (item, index) => (
-                    <li key={index} className="mb-2">
-                      <a
-                        href={`#${item.toLowerCase().replace(" ", "")}`}
-                        className="text-white-50 text-decoration-none"
-                        style={{
-                          transition: "all 0.3s ease",
-                          fontSize: "0.95rem",
-                          display: "inline-block",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.color = "#fff";
-                          e.target.style.paddingLeft = "5px";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.color = "rgba(255,255,255,0.5)";
-                          e.target.style.paddingLeft = "0";
-                        }}
-                      >
-                        {item}
-                      </a>
-                    </li>
-                  ),
-                )}
+                {[
+                  { label: "Dashboard", to: "/dashboard" },
+                  { label: "Complaints", to: "/complaints" },
+                  { label: "Payments", to: "/payments" },
+                  { label: "Analytics", to: "/analytics" },
+                ].map((item) => (
+                  <li key={item.to} className="mb-2">
+                    <Link
+                      to={item.to}
+                      className="text-white-50 text-decoration-none"
+                      style={{
+                        transition: "all 0.3s ease",
+                        fontSize: "0.95rem",
+                        display: "inline-block",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.color = "#fff";
+                        e.target.style.paddingLeft = "5px";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.color = "rgba(255,255,255,0.5)";
+                        e.target.style.paddingLeft = "0";
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+
+                <li className="mb-2">
+                  <a
+                    href="#contact"
+                    className="text-white-50 text-decoration-none"
+                    style={{
+                      transition: "all 0.3s ease",
+                      fontSize: "0.95rem",
+                      display: "inline-block",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.color = "#fff";
+                      e.target.style.paddingLeft = "5px";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.color = "rgba(255,255,255,0.5)";
+                      e.target.style.paddingLeft = "0";
+                    }}
+                  >
+                    Contact
+                  </a>
+                </li>
               </ul>
             </Col>
 
@@ -242,10 +267,10 @@ const Footer = () => {
                     style={{ color: "#667eea" }}
                   ></i>
                   <a
-                    href="mailto:support@fentech.com"
+                    href="mailto:support@clearfix-hostel.com"
                     className="text-white-50 text-decoration-none"
                   >
-                    support@fentech.com
+                    support@clearfix-hostel.com
                   </a>
                 </li>
                 <li className="mb-3">
@@ -254,10 +279,10 @@ const Footer = () => {
                     style={{ color: "#667eea" }}
                   ></i>
                   <a
-                    href="tel:+15551234567"
+                    href="tel:+911234567890"
                     className="text-white-50 text-decoration-none"
                   >
-                    +1 (555) 123-4567
+                    +91 12345 67890
                   </a>
                 </li>
                 <li className="mb-3">
@@ -265,7 +290,9 @@ const Footer = () => {
                     className="bi bi-geo-alt me-2"
                     style={{ color: "#667eea" }}
                   ></i>
-                  San Francisco, CA
+                  Hostel Office, Campus Road
+                  <br />
+                  (Your City), India
                 </li>
               </ul>
             </Col>
@@ -289,7 +316,7 @@ const Footer = () => {
               style={{ fontSize: "0.9rem" }}
             >
               <p className="mb-0">
-                &copy; {currentYear} FineEdge. All rights reserved. Built with{" "}
+                &copy; {currentYear} ClearFix. All rights reserved. Built with{" "}
                 <i
                   className="bi bi-heart-fill"
                   style={{ color: "#667eea" }}
