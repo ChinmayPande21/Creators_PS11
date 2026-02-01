@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-userSchema.index({ email: 1, role: 1 }, { unique: true });
+userSchema.index({ email: 1 }, { unique: true });
 
 userSchema.methods.toSafeJSON = function toSafeJSON() {
   return {

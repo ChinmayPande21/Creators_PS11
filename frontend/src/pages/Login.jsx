@@ -111,7 +111,6 @@ const Login = () => {
         body: {
           email: formData.email,
           password: formData.password,
-          role,
         },
       });
 
@@ -132,7 +131,10 @@ const Login = () => {
       );
       navigate("/dashboard");
     } catch (err) {
-      setError(err?.message || "Login failed");
+      const msg = err?.message || "Login failed";
+      setError(
+        msg === "Invalid credentials" ? "Incorrect email or password." : msg,
+      );
     } finally {
       setLoading(false);
     }
@@ -573,7 +575,7 @@ const Login = () => {
                     <p className="text-muted mb-0">
                       Don't have an account?{" "}
                       <Link
-                        to={`/signup?role=${role}`}
+                        to="/signup"
                         className="fw-semibold text-decoration-none link-hover"
                         style={{ color: "#667eea" }}
                       >

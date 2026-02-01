@@ -66,6 +66,17 @@ router.post("/signup", async (req, res) => {
       return;
     }
 
+    const existing = await User.findOne({
+      email: email.trim().toLowerCase(),
+    });
+    if (existing) {
+      res.status(409).json({
+        ok: false,
+        error: "User already exists. Please login.",
+      });
+      return;
+    }
+
     const passwordHash = await bcrypt.hash(password, 10);
 
     const user = await User.create({
@@ -98,7 +109,7 @@ router.post("/signup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, password, role } = req.body || {};
+    const { email, password } = req.body || {};
 
     if (!isValidEmail(email)) {
       res.status(400).json({ ok: false, error: "Valid email is required" });
@@ -110,15 +121,8 @@ router.post("/login", async (req, res) => {
       return;
     }
 
-    const normalizedRole = role === "warden" ? "warden" : "student";
-    if (!ALLOWED_ROLES.has(normalizedRole)) {
-      res.status(400).json({ ok: false, error: "Invalid role" });
-      return;
-    }
-
     const user = await User.findOne({
       email: email.trim().toLowerCase(),
-      role: normalizedRole,
     });
 
     if (!user) {

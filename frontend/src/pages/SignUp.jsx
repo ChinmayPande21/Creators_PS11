@@ -141,12 +141,7 @@ const SignUp = () => {
       );
       navigate("/dashboard");
     } catch (err) {
-      const msg = err?.message || "Signup failed";
-      setSubmitError(
-        msg === "Invalid credentials"
-          ? "Invalid credentials. Check you selected the correct role (Student/Warden) and try again."
-          : msg,
-      );
+      setSubmitError(err?.message || "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -772,7 +767,7 @@ const SignUp = () => {
                     <p className="text-muted mb-0">
                       Already have an account?{" "}
                       <Link
-                        to={`/login?role=${role}`}
+                        to="/login"
                         className="fw-semibold text-decoration-none link-hover"
                         style={{ color: "#11998e" }}
                       >
