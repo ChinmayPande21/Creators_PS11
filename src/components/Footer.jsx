@@ -18,6 +18,7 @@ const Footer = () => {
     <>
       {/* Footer Section */}
       <footer
+        id="contact"
         className="text-white pt-5 pb-4"
         style={{
           background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",

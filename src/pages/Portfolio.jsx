@@ -5,14 +5,12 @@ import PortfolioAnalytics from "../components/PortfolioAnalytics";
 import RecommendationsEngine from "../components/RecommendationsEngine";
 import AvailableShares from "../components/AvailableShares";
 
-const Portfolio = ({ darkMode }) => {
+const Portfolio = () => {
   const [activeView, setActiveView] = useState("dashboard");
 
   const navStyle = {
-    background: darkMode ? "rgba(31, 41, 55, 0.8)" : "rgba(249, 250, 251, 0.8)",
-    border: darkMode
-      ? "1px solid rgba(139, 92, 246, 0.2)"
-      : "1px solid rgba(139, 92, 246, 0.15)",
+    background: "rgba(249, 250, 251, 0.8)",
+    border: "1px solid rgba(139, 92, 246, 0.15)",
     backdropFilter: "blur(20px)",
     borderRadius: "16px",
     padding: "1rem",
@@ -20,7 +18,7 @@ const Portfolio = ({ darkMode }) => {
   };
 
   const navLinkStyle = {
-    color: darkMode ? "#d1d5db" : "#6b7280",
+    color: "#6b7280",
     borderRadius: "8px",
     padding: "0.6rem 1.2rem",
     cursor: "pointer",
@@ -40,7 +38,7 @@ const Portfolio = ({ darkMode }) => {
   return (
     <div
       style={{
-        background: darkMode ? "#111827" : "#f3f4f6",
+        background: "#f3f4f6",
         minHeight: "100vh",
         paddingTop: "2rem",
       }}
@@ -95,16 +93,10 @@ const Portfolio = ({ darkMode }) => {
         </div>
 
         {/* Views */}
-        {activeView === "dashboard" && (
-          <PortfolioDashboard darkMode={darkMode} />
-        )}
-        {activeView === "analytics" && (
-          <PortfolioAnalytics darkMode={darkMode} />
-        )}
-        {activeView === "recommendations" && (
-          <RecommendationsEngine darkMode={darkMode} />
-        )}
-        {activeView === "available" && <AvailableShares darkMode={darkMode} />}
+        {activeView === "dashboard" && <PortfolioDashboard />}
+        {activeView === "analytics" && <PortfolioAnalytics />}
+        {activeView === "recommendations" && <RecommendationsEngine />}
+        {activeView === "available" && <AvailableShares />}
       </Container>
     </div>
   );

@@ -126,10 +126,15 @@ export const calculateCorrelationMatrix = (holdings) => {
   const correlations = [];
   for (let i = 0; i < holdings.length; i++) {
     for (let j = i + 1; j < holdings.length; j++) {
+      // Calculate price change percentage for each holding
+      const stock1Return = ((holdings[i].currentPrice - holdings[i].buyPrice) / holdings[i].buyPrice) * 100;
+      const stock2Return = ((holdings[j].currentPrice - holdings[j].buyPrice) / holdings[j].buyPrice) * 100;
+      // Simplified correlation based on similar price movements
+      const correlation = stock1Return > 0 && stock2Return > 0 ? 0.7 : stock1Return < 0 && stock2Return < 0 ? 0.6 : -0.4;
       correlations.push({
         stock1: holdings[i].symbol,
         stock2: holdings[j].symbol,
-        correlation: Math.random() * 2 - 1, // Placeholder
+        correlation: Math.max(-1, Math.min(1, correlation)),
       });
     }
   }
@@ -152,6 +157,11 @@ export const generateRecommendations = (portfolio, riskProfile) => {
   };
 
   const target = targets[riskProfile] || targets.moderate;
+
+  // Prevent division by zero
+  if (totalValue === 0) {
+    return recommendations;
+  }
 
   // Calculate current allocation
   const stocksValue = portfolio.holdings

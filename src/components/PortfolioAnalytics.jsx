@@ -69,8 +69,8 @@ const PortfolioAnalytics = ({ darkMode }) => {
       0,
     );
     const topPerformer = [...metrics.holdings].sort((a, b) => {
-      const aReturn = ((b.currentPrice - b.buyPrice) / b.buyPrice) * 100;
-      const bReturn = ((a.currentPrice - a.buyPrice) / a.buyPrice) * 100;
+      const aReturn = ((a.currentPrice - a.buyPrice) / a.buyPrice) * 100;
+      const bReturn = ((b.currentPrice - b.buyPrice) / b.buyPrice) * 100;
       return bReturn - aReturn;
     })[0];
 

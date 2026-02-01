@@ -157,7 +157,7 @@ export const PortfolioProvider = ({ children }) => {
       [],
       activePortfolio.riskProfile,
     );
-  }, [activePortfolio]);
+  }, [activePortfolio, calculatePortfolioMetrics]);
 
   const value = {
     portfolios,

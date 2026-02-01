@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import {
   Container,
   Row,
@@ -35,7 +35,7 @@ const PortfolioDashboard = ({ darkMode }) => {
 
   const metrics = getPortfolioMetrics();
 
-  if (!metrics || !activePortfolio) {
+  if (!metrics || !activePortfolio || !metrics.holdings || metrics.holdings.length === 0) {
     return <div>Loading...</div>;
   }
 
@@ -44,50 +44,57 @@ const PortfolioDashboard = ({ darkMode }) => {
     setShowChart(true);
   };
 
-  // CAGR Calculator (Compound Annual Growth Rate)
-  const calculateCAGR = () => {
-    if (!metrics.holdings || metrics.holdings.length === 0) return 0;
+  // Memoize expensive calculations to prevent recalculation on every render
+  const { cagr, irr, totalReturn } = useMemo(() => {
+    // CAGR Calculator (Compound Annual Growth Rate)
+    const calculateCAGR = () => {
+      if (!metrics.holdings || metrics.holdings.length === 0) return 0;
 
-    const totalInvestment = metrics.holdings.reduce(
-      (sum, h) => sum + h.quantity * h.buyPrice,
-      0,
-    );
+      const totalInvestment = metrics.holdings.reduce(
+        (sum, h) => sum + h.quantity * h.buyPrice,
+        0,
+      );
 
-    if (totalInvestment <= 0) return 0;
+      if (totalInvestment <= 0) return 0;
 
-    // Assuming 1 year holding period for CAGR calculation
-    const years = 1;
-    const endValue = metrics.currentValue || 0;
-    const startValue = totalInvestment;
+      // Calculate years based on actual holding period (using purchase date)
+      const earliestDate = new Date(Math.min(...metrics.holdings.map(h => new Date(h.date))));
+      const now = new Date();
+      const years = (now - earliestDate) / (365.25 * 24 * 60 * 60 * 1000) || 1;
+      const endValue = metrics.currentValue || 0;
+      const startValue = totalInvestment;
 
-    if (startValue <= 0) return 0;
+      if (startValue <= 0) return 0;
 
-    const cagr = (Math.pow(endValue / startValue, 1 / years) - 1) * 100;
-    return isFinite(cagr) ? cagr : 0;
-  };
+      const cagr = (Math.pow(endValue / startValue, 1 / years) - 1) * 100;
+      return isFinite(cagr) ? cagr : 0;
+    };
 
-  // Internal Rate of Return Calculator
-  const calculateIRR = () => {
-    if (!metrics.holdings || metrics.holdings.length === 0) return 0;
+    // Internal Rate of Return Calculator
+    const calculateIRR = () => {
+      if (!metrics.holdings || metrics.holdings.length === 0) return 0;
 
-    const totalInvestment = metrics.holdings.reduce(
-      (sum, h) => sum + h.quantity * h.buyPrice,
-      0,
-    );
+      const totalInvestment = metrics.holdings.reduce(
+        (sum, h) => sum + h.quantity * h.buyPrice,
+        0,
+      );
 
-    const currentValue = metrics.currentValue || 0;
-    const gainLoss = currentValue - totalInvestment;
+      const currentValue = metrics.currentValue || 0;
+      const gainLoss = currentValue - totalInvestment;
 
-    if (totalInvestment <= 0) return 0;
+      if (totalInvestment <= 0) return 0;
 
-    // Simplified IRR = (Current Value - Initial Investment) / Initial Investment * 100
-    const irr = (gainLoss / totalInvestment) * 100;
-    return isFinite(irr) ? irr : 0;
-  };
+      // Simplified IRR = (Current Value - Initial Investment) / Initial Investment * 100
+      const irr = (gainLoss / totalInvestment) * 100;
+      return isFinite(irr) ? irr : 0;
+    };
 
-  const cagr = calculateCAGR();
-  const irr = calculateIRR();
-  const totalReturn = metrics.totalReturn || 0;
+    return {
+      cagr: calculateCAGR(),
+      irr: calculateIRR(),
+      totalReturn: metrics.totalReturn || 0,
+    };
+  }, [metrics]);
 
   const dashboardStyle = {
     background: darkMode
@@ -464,11 +471,16 @@ const PortfolioDashboard = ({ darkMode }) => {
                 </tr>
               </thead>
               <tbody>
-                {metrics.holdings.map((holding) => {
+                {(metrics.holdings || [])
+                  .filter((holding) => holding && holding.symbol)
+                  .map((holding) => {
+                  const buyPrice = holding.buyPrice || 0;
+                  const currentPrice = holding.currentPrice || 0;
+                  const currentValue = holding.currentValue || 0;
                   const gainLoss =
-                    ((holding.currentPrice - holding.buyPrice) /
-                      holding.buyPrice) *
-                    100;
+                    buyPrice > 0
+                      ? ((currentPrice - buyPrice) / buyPrice) * 100
+                      : 0;
                   return (
                     <tr
                       key={holding.id}
@@ -484,14 +496,14 @@ const PortfolioDashboard = ({ darkMode }) => {
                       <td>{holding.quantity}</td>
                       <td>
                         ₹
-                        {holding.buyPrice.toLocaleString("en-US", {
+                        {buyPrice.toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
                         })}
                       </td>
                       <td>
                         ₹
-                        {holding.currentPrice.toLocaleString("en-US", {
+                        {currentPrice.toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
                         })}
@@ -506,7 +518,7 @@ const PortfolioDashboard = ({ darkMode }) => {
                       </td>
                       <td>
                         ₹
-                        {holding.currentValue.toLocaleString("en-US", {
+                        {currentValue.toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
                         })}

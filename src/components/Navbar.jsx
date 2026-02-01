@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Navbar, Nav, Container, Button, Badge } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 
-const NavigationBar = ({ darkMode, toggleDarkMode }) => {
+const NavigationBar = () => {
   const [expanded, setExpanded] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -17,22 +17,14 @@ const NavigationBar = ({ darkMode, toggleDarkMode }) => {
 
   const navbarStyle = {
     background: scrolled
-      ? darkMode
-        ? "rgba(17, 24, 39, 0.98)"
-        : "rgba(255, 255, 255, 0.98)"
-      : darkMode
-        ? "rgba(17, 24, 39, 0.85)"
-        : "rgba(255, 255, 255, 0.85)",
+      ? "rgba(255, 255, 255, 0.98)"
+      : "rgba(255, 255, 255, 0.85)",
     backdropFilter: "blur(20px)",
     borderBottom: scrolled
-      ? darkMode
-        ? "1px solid rgba(139, 92, 246, 0.3)"
-        : "1px solid rgba(139, 92, 246, 0.2)"
+      ? "1px solid rgba(139, 92, 246, 0.2)"
       : "none",
     boxShadow: scrolled
-      ? darkMode
-        ? "0 8px 32px rgba(139, 92, 246, 0.15), 0 2px 8px rgba(0, 0, 0, 0.2)"
-        : "0 8px 32px rgba(139, 92, 246, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05)"
+      ? "0 8px 32px rgba(139, 92, 246, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05)"
       : "none",
     transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
     padding: scrolled ? "0.4rem 0" : "0.8rem 0",
@@ -170,13 +162,13 @@ const NavigationBar = ({ darkMode, toggleDarkMode }) => {
           }
           
           .nav-link-custom:hover {
-            background: ${darkMode ? "rgba(139, 92, 246, 0.15)" : "rgba(139, 92, 246, 0.1)"};
+            background: rgba(139, 92, 246, 0.1);
             transform: translateY(-3px);
             box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
           }
           
           .nav-link-custom.active {
-            background: ${darkMode ? "rgba(139, 92, 246, 0.2)" : "rgba(139, 92, 246, 0.15)"};
+            background: rgba(139, 92, 246, 0.15);
             color: #8b5cf6 !important;
             box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
           }
@@ -270,52 +262,21 @@ const NavigationBar = ({ darkMode, toggleDarkMode }) => {
           }
           
           .theme-toggle {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: ${
-              darkMode
-                ? "linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.15) 100%)"
-                : "linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%)"
-            };
-            border: 2px solid ${darkMode ? "rgba(251, 191, 36, 0.3)" : "rgba(139, 92, 246, 0.3)"};
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px ${darkMode ? "rgba(251, 191, 36, 0.2)" : "rgba(139, 92, 246, 0.2)"};
-          }
-          
-          .theme-toggle:hover {
-            background: ${
-              darkMode
-                ? "linear-gradient(135deg, rgba(251, 191, 36, 0.25) 0%, rgba(245, 158, 11, 0.25) 100%)"
-                : "linear-gradient(135deg, rgba(102, 126, 234, 0.25) 0%, rgba(118, 75, 162, 0.25) 100%)"
-            };
-            transform: rotate(180deg) scale(1.1);
-            box-shadow: 0 4px 15px ${darkMode ? "rgba(251, 191, 36, 0.4)" : "rgba(139, 92, 246, 0.4)"};
-            border-color: ${darkMode ? "rgba(251, 191, 36, 0.5)" : "rgba(139, 92, 246, 0.5)"};
-          }
-          
-          .theme-toggle i {
-            font-size: 1.3rem;
-            color: ${darkMode ? "#fbbf24" : "#8b5cf6"};
-            filter: drop-shadow(0 2px 4px ${darkMode ? "rgba(251, 191, 36, 0.5)" : "rgba(139, 92, 246, 0.5)"});
+            display: none;
           }
           
           .navbar-toggler-custom {
-            border: 2px solid ${darkMode ? "rgba(139, 92, 246, 0.3)" : "rgba(139, 92, 246, 0.3)"};
-            background: ${darkMode ? "rgba(139, 92, 246, 0.1)" : "rgba(139, 92, 246, 0.08)"};
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            background: rgba(139, 92, 246, 0.08);
             border-radius: 12px;
             padding: 0.6rem;
             transition: all 0.3s ease;
           }
           
           .navbar-toggler-custom:hover {
-            background: ${darkMode ? "rgba(139, 92, 246, 0.2)" : "rgba(139, 92, 246, 0.15)"};
+            background: rgba(139, 92, 246, 0.15);
             transform: scale(1.05);
-            border-color: ${darkMode ? "rgba(139, 92, 246, 0.5)" : "rgba(139, 92, 246, 0.5)"};
+            border-color: rgba(139, 92, 246, 0.5);
           }
           
           .navbar-toggler-custom:focus {
@@ -328,19 +289,17 @@ const NavigationBar = ({ darkMode, toggleDarkMode }) => {
             gap: 0.75rem;
             padding: 0.3rem 0.5rem;
             border-radius: 16px;
-            background: ${
-              darkMode ? "rgba(139, 92, 246, 0.1)" : "rgba(139, 92, 246, 0.08)"
-            };
+            background: rgba(139, 92, 246, 0.08);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid ${darkMode ? "rgba(139, 92, 246, 0.2)" : "rgba(139, 92, 246, 0.15)"};
+            border: 1px solid rgba(139, 92, 246, 0.15);
             box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
           }
           
           .brand-logo-wrapper:hover {
-            background: ${darkMode ? "rgba(139, 92, 246, 0.15)" : "rgba(139, 92, 246, 0.12)"};
+            background: rgba(139, 92, 246, 0.12);
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
-            border-color: ${darkMode ? "rgba(139, 92, 246, 0.4)" : "rgba(139, 92, 246, 0.3)"};
+            border-color: rgba(139, 92, 246, 0.3);
           }
           
           .brand-icon-container {
@@ -354,17 +313,13 @@ const NavigationBar = ({ darkMode, toggleDarkMode }) => {
           
           @media (max-width: 991px) {
             .navbar-collapse {
-              background: ${
-                darkMode
-                  ? "linear-gradient(135deg, rgba(17, 24, 39, 0.98) 0%, rgba(31, 41, 55, 0.98) 100%)"
-                  : "linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(249, 250, 251, 0.98) 100%)"
-              };
+              background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(249, 250, 251, 0.98) 100%);
               backdrop-filter: blur(20px);
               border-radius: 16px;
               margin-top: 1rem;
               padding: 1.5rem;
               box-shadow: 0 8px 32px rgba(139, 92, 246, 0.2);
-              border: 1px solid ${darkMode ? "rgba(139, 92, 246, 0.3)" : "rgba(139, 92, 246, 0.2)"};
+              border: 1px solid rgba(139, 92, 246, 0.2);
               pointer-events: auto;
             }
             }
@@ -418,7 +373,7 @@ const NavigationBar = ({ darkMode, toggleDarkMode }) => {
           >
             <i
               className={`bi ${expanded ? "bi-x-lg" : "bi-list"}`}
-              style={{ color: darkMode ? "white" : "#1a202c" }}
+              style={{ color: "#1a202c" }}
             ></i>
           </Navbar.Toggle>
 
@@ -431,46 +386,25 @@ const NavigationBar = ({ darkMode, toggleDarkMode }) => {
                 onClick={() => setExpanded(false)}
                 style={{
                   ...navLinkStyle,
-                  color: darkMode ? "white" : "#1a202c",
+                  color: "#1a202c",
                 }}
               >
                 <i className="bi bi-house-door me-2"></i>Home
               </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/portfolio"
-                className={`nav-link-custom ${isActive("/portfolio") ? "active" : ""}`}
-                onClick={() => setExpanded(false)}
-                style={{
-                  ...navLinkStyle,
-                  color: darkMode ? "white" : "#1a202c",
-                }}
-              >
-                <i className="bi bi-graph-up me-2"></i>Portfolio
-              </Nav.Link>
+
               <Nav.Link
                 href="#contact"
                 className="nav-link-custom"
                 onClick={() => setExpanded(false)}
                 style={{
                   ...navLinkStyle,
-                  color: darkMode ? "white" : "#1a202c",
+                  color: "#1a202c",
                 }}
               >
                 <i className="bi bi-envelope me-2"></i>Contact
               </Nav.Link>
 
               <div className="d-flex gap-2 mt-3 mt-lg-0 align-items-center ms-lg-3">
-                <button
-                  className="theme-toggle"
-                  onClick={toggleDarkMode}
-                  title={darkMode ? "Light mode" : "Dark mode"}
-                >
-                  <i
-                    className={`bi ${darkMode ? "bi-sun-fill" : "bi-moon-fill"}`}
-                  ></i>
-                </button>
-
                 <Button
                   as={Link}
                   to="/login"
