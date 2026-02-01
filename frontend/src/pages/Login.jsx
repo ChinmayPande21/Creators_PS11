@@ -573,7 +573,7 @@ const Login = () => {
                     <p className="text-muted mb-0">
                       Don't have an account?{" "}
                       <Link
-                        to="/signup"
+                        to={`/signup?role=${role}`}
                         className="fw-semibold text-decoration-none link-hover"
                         style={{ color: "#667eea" }}
                       >
