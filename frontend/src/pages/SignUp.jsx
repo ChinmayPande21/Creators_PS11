@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  Alert,
+} from "react-bootstrap";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { apiFetchJson } from "../utils/api";
 
 const buildRememberKey = (role) => `clearfix.rememberedLogin.${role}`;
 
@@ -41,6 +50,7 @@ const SignUp = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -59,6 +69,7 @@ const SignUp = () => {
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
+    if (submitError) setSubmitError("");
   };
 
   const validateForm = () => {
@@ -91,7 +102,7 @@ const SignUp = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
 
@@ -102,8 +113,17 @@ const SignUp = () => {
 
     setLoading(true);
 
-    // Mock registration logic
-    setTimeout(() => {
+    try {
+      const data = await apiFetchJson("/api/auth/signup", {
+        method: "POST",
+        body: {
+          fullName: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+          role,
+        },
+      });
+
       if (formData.rememberMe) {
         writeRememberedLogin(role, {
           email: formData.email,
@@ -112,11 +132,19 @@ const SignUp = () => {
       } else {
         clearRememberedLogin(role);
       }
-      // Simulate successful registration
-      login(formData.email, formData.fullName, role);
+
+      login(
+        data?.user?.email,
+        data?.user?.fullName,
+        data?.user?.role,
+        data?.token,
+      );
       navigate("/dashboard");
+    } catch (err) {
+      setSubmitError(err?.message || "Signup failed");
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   const pageStyle = {
@@ -464,6 +492,16 @@ const SignUp = () => {
                     </span>
                   </div>
                 </div>
+
+                {submitError ? (
+                  <Alert
+                    variant="danger"
+                    className="mb-3"
+                    style={{ borderRadius: "14px" }}
+                  >
+                    {submitError}
+                  </Alert>
+                ) : null}
 
                 <Form onSubmit={handleSubmit}>
                   <div className="d-flex gap-2 mb-3">

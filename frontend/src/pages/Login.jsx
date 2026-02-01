@@ -10,6 +10,7 @@ import {
 } from "react-bootstrap";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { apiFetchJson } from "../utils/api";
 
 const buildRememberKey = (role) => `clearfix.rememberedLogin.${role}`;
 
@@ -99,30 +100,42 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    // Mock authentication logic
-    setTimeout(() => {
-      if (formData.email && formData.password) {
-        if (formData.rememberMe) {
-          writeRememberedLogin(role, {
-            email: formData.email,
-            password: formData.password,
-          });
-        } else {
-          clearRememberedLogin(role);
-        }
-        // Simulate successful login
-        login(formData.email, undefined, role);
-        navigate("/dashboard");
+    try {
+      const data = await apiFetchJson("/api/auth/login", {
+        method: "POST",
+        body: {
+          email: formData.email,
+          password: formData.password,
+          role,
+        },
+      });
+
+      if (formData.rememberMe) {
+        writeRememberedLogin(role, {
+          email: formData.email,
+          password: formData.password,
+        });
       } else {
-        setError("Please enter valid credentials");
+        clearRememberedLogin(role);
       }
+
+      login(
+        data?.user?.email,
+        data?.user?.fullName,
+        data?.user?.role,
+        data?.token,
+      );
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err?.message || "Login failed");
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const pageStyle = {

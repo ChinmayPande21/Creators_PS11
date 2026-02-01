@@ -21,15 +21,21 @@ export const AuthProvider = ({ children }) => {
     return localStorage.getItem("userName") || "";
   });
 
-  const login = (email, name, role = "student") => {
+  const [authToken, setAuthToken] = useState(() => {
+    return localStorage.getItem("authToken") || "";
+  });
+
+  const login = (email, name, role = "student", token) => {
     localStorage.setItem("isAuthenticated", "true");
     localStorage.setItem("userRole", role);
     if (email) localStorage.setItem("userEmail", email);
     if (name) localStorage.setItem("userName", name);
+    if (token) localStorage.setItem("authToken", token);
     setIsAuthenticated(true);
     setUserRole(role);
     setUserEmail(email || "");
     setUserName(name || "");
+    if (token) setAuthToken(token);
   };
 
   const logout = () => {
@@ -37,15 +43,25 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("userRole");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userName");
+    localStorage.removeItem("authToken");
     setIsAuthenticated(false);
     setUserRole("");
     setUserEmail("");
     setUserName("");
+    setAuthToken("");
   };
 
   const value = useMemo(
-    () => ({ isAuthenticated, userRole, userEmail, userName, login, logout }),
-    [isAuthenticated, userRole, userEmail, userName],
+    () => ({
+      isAuthenticated,
+      userRole,
+      userEmail,
+      userName,
+      authToken,
+      login,
+      logout,
+    }),
+    [isAuthenticated, userRole, userEmail, userName, authToken],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
