@@ -57,6 +57,8 @@ const Dashboard = () => {
 
   const [alertLocation, setAlertLocation] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+  const [alertRaggingType, setAlertRaggingType] = useState("Physical ragging");
+  const [alertIntensity, setAlertIntensity] = useState("High");
   const [alertPhotoDataUrl, setAlertPhotoDataUrl] = useState("");
   const [alertPhotoError, setAlertPhotoError] = useState("");
   const [wardenAckNoteById, setWardenAckNoteById] = useState({});
@@ -68,15 +70,19 @@ const Dashboard = () => {
     return [...alerts].sort((a, b) => b.createdAt - a.createdAt);
   }, [alerts]);
 
-  const submitAlert = () => {
-    const id = createAlert({
+  const submitAlert = async () => {
+    const id = await createAlert({
       location: normalizeRoomLocation(alertLocation),
       message: alertMessage,
+      raggingType: alertRaggingType,
+      intensity: alertIntensity,
       photoDataUrl: alertPhotoDataUrl,
     });
     if (!id) return;
     setAlertLocation("");
     setAlertMessage("");
+    setAlertRaggingType("Physical ragging");
+    setAlertIntensity("High");
     setAlertPhotoDataUrl("");
     setAlertPhotoError("");
   };
@@ -353,6 +359,24 @@ const Dashboard = () => {
                   padding: "1rem",
                 }}
               >
+                <div
+                  className="mb-3"
+                  style={{
+                    borderRadius: 12,
+                    border: "1px solid rgba(239, 68, 68, 0.25)",
+                    background: "rgba(239, 68, 68, 0.10)",
+                    padding: "0.85rem",
+                  }}
+                >
+                  <div style={{ fontWeight: 900, color: "#991b1b" }}>
+                    Warning
+                  </div>
+                  <div style={{ fontWeight: 700, color: "#7f1d1d" }}>
+                    In case of fake allegations of ragging, strict actions will
+                    be taken.
+                  </div>
+                </div>
+
                 <div className="d-flex flex-wrap gap-3">
                   <Form.Group style={{ minWidth: 220, flex: "1 1 220px" }}>
                     <Form.Label style={{ fontWeight: 900 }}>Room No</Form.Label>
@@ -362,6 +386,42 @@ const Dashboard = () => {
                       placeholder="e.g., 303"
                       style={{ borderRadius: 12, fontWeight: 800 }}
                     />
+                  </Form.Group>
+
+                  <Form.Group style={{ minWidth: 240, flex: "1 1 240px" }}>
+                    <Form.Label style={{ fontWeight: 900 }}>
+                      Type of Ragging
+                    </Form.Label>
+                    <Form.Select
+                      value={alertRaggingType}
+                      onChange={(e) => setAlertRaggingType(e.target.value)}
+                      style={{ borderRadius: 12, fontWeight: 800 }}
+                    >
+                      <option>Physical ragging</option>
+                      <option>Verbal ragging</option>
+                      <option>Psychological / emotional ragging</option>
+                      <option>Sexual ragging</option>
+                      <option>Economic ragging</option>
+                      <option>Cyber ragging</option>
+                      <option>Institutional ragging</option>
+                      <option>Discriminatory ragging</option>
+                    </Form.Select>
+                  </Form.Group>
+
+                  <Form.Group style={{ minWidth: 200, flex: "1 1 200px" }}>
+                    <Form.Label style={{ fontWeight: 900 }}>
+                      Intensity
+                    </Form.Label>
+                    <Form.Select
+                      value={alertIntensity}
+                      onChange={(e) => setAlertIntensity(e.target.value)}
+                      style={{ borderRadius: 12, fontWeight: 800 }}
+                    >
+                      <option>Low</option>
+                      <option>Medium</option>
+                      <option>High</option>
+                      <option>Severe</option>
+                    </Form.Select>
                   </Form.Group>
                   <Form.Group style={{ minWidth: 260, flex: "2 1 260px" }}>
                     <Form.Label style={{ fontWeight: 900 }}>
@@ -443,6 +503,40 @@ const Dashboard = () => {
                             {normalizeRoomLocation(a.location) || "Unknown"}
                           </div>
                           <AlertStatusPill status={a.status} />
+                          {a.raggingType ? (
+                            <Badge
+                              bg=""
+                              style={{
+                                background: "rgba(99, 102, 241, 0.12)",
+                                color: "#3730a3",
+                                border: "1px solid rgba(99, 102, 241, 0.25)",
+                                borderRadius: 999,
+                                padding: "0.4rem 0.65rem",
+                                fontWeight: 900,
+                              }}
+                            >
+                              {a.raggingType}
+                            </Badge>
+                          ) : null}
+                          {a.intensity ? (
+                            <Badge
+                              bg={
+                                a.intensity === "Severe"
+                                  ? "danger"
+                                  : a.intensity === "High"
+                                    ? "warning"
+                                    : "secondary"
+                              }
+                              text={a.intensity === "High" ? "dark" : undefined}
+                              style={{
+                                borderRadius: 999,
+                                padding: "0.4rem 0.65rem",
+                                fontWeight: 900,
+                              }}
+                            >
+                              Intensity: {a.intensity}
+                            </Badge>
+                          ) : null}
                           <div
                             className="text-muted"
                             style={{ fontWeight: 800, fontSize: "0.9rem" }}

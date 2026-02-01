@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { connectMongo, getMongoStatus } from "./db.js";
 import authRouter from "./routes/auth.js";
+import raggingRouter from "./routes/ragging.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use(
 app.use(express.json({ limit: "2mb" }));
 
 app.use("/api/auth", authRouter);
+app.use("/api/ragging", raggingRouter);
 
 app.get("/", (req, res) => {
   res.json({
